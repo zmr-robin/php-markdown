@@ -7,12 +7,12 @@ require_once("phpmarkdown.php");
 $pm = new PHPMarkdown();
 
 $testCase0 = "# Hallo Welt";
-$testCase1 = "Das **ist** ein Test. Es *scheint zu funktionieren.*";
-$testCase2 = "## Header 2";
+$testCase1 = "Das **ist** ==ein Test==. Es *scheint ~~nicht~~ zu funktionieren.*";
+$testCase2 = "---";
 $testCase3 = "- Test 1";
-$testCase4 = "  - Test 2";
-$testCase5 = "  - Lorem Ipsum Text amk";
-$testCase6 = "- Test 3";
+$testCase4 = "  - **Test** 2";
+$testCase5 = "  - Lorem **Ipsum** Text *amk*";
+$testCase6 = "- _Test_ 3";
 $testCase7 = "#### Header 4";
 
 echo $pm->convertLineToHtml($testCase0);

@@ -4,23 +4,33 @@ class PHPMarkdown {
 
     private $bold = false;
     private $italic = false;
-    private $listStar = false;
-    private $listHyphen = false;
+    private $underline = false;
+    private $strikethrough = false;
+    private $highlight = false;
     private $listIndex = -1;
+
 
 
     function __construct(){
 
     }
 
-    public function convertFileToHtml(){
-
+    public function convertFileToHtml($file){
+        $content = "";
+        foreach(file($file) as $line){
+            $content = $content . $this->convertLineToHtml($line);
+        }
+        return $content;
     }
 
     public function convertLineToHtml($content){
         $content = $this->convertLineType($content);
         $content = $this->replaceFontStyleBold($content);
         $content = $this->replaceFontStyleItalic($content);
+        $content = $this->replaceFontStyleUnderline($content);
+        $content = $this->replaceFontStyleHighlight($content);
+        $content = $this->replaceFontStyleStrikethrough($content);
+        $content = $this->replaceHyperlink($content);
         echo "\n"; // for debugging 
         return $content;
     } 
@@ -39,11 +49,14 @@ class PHPMarkdown {
                 }
                 break;
             case "-":
-                $content = $this->convertToBulletlist($content, "-");
-                return $content;
+                if ($content[1] == " ") {
+                    $content = $this->convertToBulletlist($content, "-");
+                    return $content;
+                } elseif (($content[0] . $content[1] . $content[2]) == "---" && strlen($content) == 3) {
+                    return "<hr>";
+                }
             case ">":
-                // convert to highlight 
-                // !todo 
+                $content = $this->convertToQuote($content);
                 $content = ($this->listIndex != -1) ? "</ul>" . $content : $content;
                 $this->listIndex = -1;
                 return $content;
@@ -90,7 +103,11 @@ class PHPMarkdown {
     }
 
     private function convertToBulletlist($content, $listType, $index = 0) {
-        //echo "$index";
+        // remove spaces before hyphen
+        $content = preg_replace('/-/', '', $content, 1);
+        $content = preg_replace('/ /', '', $content, $index + 1);
+        
+        // Check if index is bigger or smaller than current index
         if ($this->listIndex < $index){
             $this->listIndex = $index;
             return "<ul><li>" . $content . "</li>";
@@ -100,6 +117,11 @@ class PHPMarkdown {
         } else {
             return "<li>" . $content . "</li>";
         }
+    }
+
+    private function convertToQuote($content){
+        $content = preg_replace("/\>/", "", $content, 1);
+        return "<blockquote>$content</blockquote>";
     }
 
     private function replaceFontStyleBold($content) {
@@ -121,7 +143,6 @@ class PHPMarkdown {
             }
         }
         return $content;
-        
     }
 
     private function replaceFontStyleItalic($content) {
@@ -144,4 +165,72 @@ class PHPMarkdown {
         }
         return $content;
     }
+
+    private function replaceFontStyleUnderline($content) {
+        $underlineCheck = false;
+        while (!$underlineCheck) {
+            if(str_contains(haystack: $content, needle: "_")){
+                switch($this->underline){
+                    case false:
+                        $content = preg_replace("/\_/", "<u>", $content, 1);
+                        $this->underline = true;
+                        break;
+                    case true:
+                        $content = preg_replace("/\_/", "</u>", $content, 1);
+                        $this->underline = false;
+                        break;
+                }
+            } else {
+                $underlineCheck = true;
+            }
+        }
+        return $content;
+    }
+
+    private function replaceFontStyleHighlight($content) {
+        $highlightCheck = false;
+        while (!$highlightCheck) {
+            if(str_contains(haystack: $content, needle: "==")){
+                switch($this->highlight){
+                    case false:
+                        $content = preg_replace("/\==/", "<mark>", $content, 1);
+                        $this->highlight = true;
+                        break;
+                    case true:
+                        $content = preg_replace("/\==/", "</mark>", $content, 1);
+                        $this->highlight = false;
+                        break;
+                }
+            } else {
+                $highlightCheck = true;
+            }
+        }
+        return $content;
+    }
+    private function replaceFontStyleStrikethrough($content) {
+        $strikethroughCheck = false;
+        while (!$strikethroughCheck) {
+            if(str_contains(haystack: $content, needle: "~~")){
+                switch($this->strikethrough){
+                    case false:
+                        $content = preg_replace("/\~~/", "<strike>", $content, 1);
+                        $this->strikethrough = true;
+                        break;
+                    case true:
+                        $content = preg_replace("/\~~/", "</strike>", $content, 1);
+                        $this->strikethrough = false;
+                        break;
+                }
+            } else {
+                $strikethroughCheck = true;
+            }
+        }
+        return $content;
+    }
+
+    private function replaceHyperlink($content){
+
+        return $content;
+    }
+
 }
