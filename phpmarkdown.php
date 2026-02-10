@@ -8,7 +8,7 @@ class PHPMarkdown {
     private $strikethrough = false;
     private $highlight = false;
     private $listIndex = -1;
-
+    private $numListIndex = -1;
 
 
     function __construct(){
@@ -42,8 +42,7 @@ class PHPMarkdown {
         switch($content[0]){
             case "#":   
                 $content = $this->convertToHeader($content);
-                $content = ($this->listIndex != -1) ? "</ul>" . $content : $content;
-                $this->listIndex = -1;
+                $content = $this->closeList($content);
                 return $content;
             case "*":
                 if($content[1] != "*"){
@@ -63,12 +62,14 @@ class PHPMarkdown {
                 }
             case ">":
                 $content = $this->convertToQuote($content);
-                $content = ($this->listIndex != -1) ? "</ul>" . $content : $content;
-                $this->listIndex = -1;
+                $content = $this->closeList($content);
                 return $content;
             default:
-                if (preg_match('/^[0-9]+\.?/',$content)){
+                if (preg_match('/^\s*([0-9]+)\.?/', $content, $matches)){
                     // convert to decimal list
+                    echo "Metch!!" . (int) $matches[1];
+                    $content = $this->convertToDecimalList($content, (int) $matches[1]);
+                    return $content;
                 } elseif(str_contains($content, "-") && $content[0] == " "){
                     // check if it's a indented list 
                     for ($i = 0; $i < strlen($content); $i++){
@@ -84,8 +85,7 @@ class PHPMarkdown {
                     }
                 } else {
                     // convert to <p>
-                    $content = ($this->listIndex != -1) ? "</ul>" . $content : $content;
-                    $this->listIndex = -1;
+                    $content = $this->closeList($content);
                     return "<p>$content</p>";
                 }
         }
@@ -106,6 +106,40 @@ class PHPMarkdown {
             $headerCounter = 6;
         }
         return str_replace("$headerReplace ", "<h$headerCounter>", $content) . "</h$headerCounter>";
+    }
+
+    private function closeList($content){
+
+
+        if ($this->listIndex != -1 || $this->numListIndex != -1) {
+            return "</ul>$content";
+            $this->listIndex = -1;
+            $this->listIndex = -1;
+        } else {
+            return $content;
+        }
+    }
+
+    private function convertToDecimalList($content, $listNum){
+        $index = 0;
+        for($i = 0; $i < strlen($content); $i++) {
+            if ($content[$i] == " "){
+                $index ++;
+            } else {
+                $i = strlen($content);
+            }
+        }
+        $content = preg_replace('/^\s*' . $listNum . '\.\s*/', '', $content, 1);
+        $content = preg_replace('/ /', '', $content, $index + 1);
+        if ($this->numListIndex < $index){
+            $this->numListIndex = $index;
+            return "<ol><li value='$listNum'>" . $content . "</li>";
+        } elseif ($this->numListIndex > $index){
+            $this->numListIndex = $index;
+            return "</ol><li value='$listNum'>" . $content . "</li>";
+        } else {
+            return "<li value='$listNum'>" . $content . "</li>";
+        }
     }
 
     private function convertToBulletlist($content, $listType, $index = 0) {

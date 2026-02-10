@@ -12,6 +12,17 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
     - et ea rebum
     - set clita kasd gubergren
 - diam lorem num
+
+---
+
+1. Test 1
+2. Test 3
+    1. Test 4
+    2. Test 5
+3. Test 6
+    - Test 7
+    - Test 8
+
 ## Hello World 2
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
 > Robin Z.
