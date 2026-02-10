@@ -17,11 +17,14 @@ class PHPMarkdown {
 
     public function convertFileToHtml($file){
         $content = "";
-        foreach(file($file) as $line){
-            $content = $content . $this->convertLineToHtml($line);
+        foreach (file($file) as $line) {
+            if (trim($line) != '') {
+                $content = $content . $this->convertLineToHtml($line);
+            }
         }
         return $content;
     }
+
 
     public function convertLineToHtml($content){
         $content = $this->convertLineType($content);
@@ -46,14 +49,17 @@ class PHPMarkdown {
                 if($content[1] != "*"){
                     $content = $this->convertToBulletlist($content, "*");
                     return $content;
+                } else {
+                    return "<p>$content</p>";
                 }
-                break;
             case "-":
                 if ($content[1] == " ") {
                     $content = $this->convertToBulletlist($content, "-");
                     return $content;
-                } elseif (($content[0] . $content[1] . $content[2]) == "---" && strlen($content) == 3) {
+                } elseif (($content[0] . $content[1] . $content[2]) == "---" && strlen(trim($content)) == 3) {
                     return "<hr>";
+                } else {
+                    return "<p>$content</p>";
                 }
             case ">":
                 $content = $this->convertToQuote($content);
