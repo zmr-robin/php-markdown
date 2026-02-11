@@ -17,9 +17,10 @@ class PHPMarkdown {
 
     public function convertFileToHtml($file){
         $content = "";
-        foreach (file($file) as $line) {
-            if (trim($line) != '') {
-                $content = $content . $this->convertLineToHtml($line);
+        foreach ($file as $line) {
+            if (trim($line) !== '') {
+                $content .= $this->convertLineToHtml(trim($line, "\n"));
+                $content .= "\n";
             }
         }
         return $content;
@@ -34,7 +35,6 @@ class PHPMarkdown {
         $content = $this->replaceFontStyleHighlight($content);
         $content = $this->replaceFontStyleStrikethrough($content);
         $content = $this->replaceHyperlink($content);
-        echo "\n"; // for debugging 
         return $content;
     } 
 
@@ -56,7 +56,8 @@ class PHPMarkdown {
                     $content = $this->convertToBulletlist($content, "-");
                     return $content;
                 } elseif (($content[0] . $content[1] . $content[2]) == "---" && strlen(trim($content)) == 3) {
-                    return "<hr>";
+                    $content = "<hr>";
+                    return $this->closeList($content);
                 } else {
                     return "<p>$content</p>";
                 }
@@ -67,7 +68,6 @@ class PHPMarkdown {
             default:
                 if (preg_match('/^\s*([0-9]+)\.?/', $content, $matches)){
                     // convert to decimal list
-                    echo "Metch!!" . (int) $matches[1];
                     $content = $this->convertToDecimalList($content, (int) $matches[1]);
                     return $content;
                 } elseif(str_contains($content, "-") && $content[0] == " "){
@@ -110,14 +110,27 @@ class PHPMarkdown {
 
     private function closeList($content){
 
-
-        if ($this->listIndex != -1 || $this->numListIndex != -1) {
-            return "</ul>$content";
-            $this->listIndex = -1;
-            $this->listIndex = -1;
+        if ($this->listIndex != -1 && $this->numListIndex != -1) {
+            if ($this->listIndex < $this->numListIndex){
+                $this->numListIndex = -1;
+                $this->listIndex = -1;
+                return "</ol></ul>$content";
+            } elseif ($this->listIndex > $this->numListIndex) {
+                $this->numListIndex = -1;
+                $this->listIndex = -1;
+                return "</ul></ol>$content";
+            }
         } else {
-            return $content;
+            if ($this->numListIndex != -1 ){
+                $this->numListIndex = -1;
+                return "</ol>$content";             
+            } elseif ($this->listIndex != -1) {
+                $this->listIndex = -1;
+                return "</ul>$content";
+            }
         }
+        return $content;
+        
     }
 
     private function convertToDecimalList($content, $listNum){

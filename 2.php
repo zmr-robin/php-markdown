@@ -9,11 +9,5 @@ require_once("phpmarkdown.php");
 
 $pm = new PHPMarkdown();
 $file = file("./test.md");
-$content = "";
-foreach ($file as $line) {
-    if (trim($line) !== '') {
-        $content .= $pm->convertLineToHtml($line);
-    }
-}
 
-echo $content;
+echo $pm->convertFileToHtml($file);
