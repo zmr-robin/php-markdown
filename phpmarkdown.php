@@ -130,7 +130,7 @@ class PHPMarkdown {
             }
         }
         return $content;
-        
+
     }
 
     private function convertToDecimalList($content, $listNum){
@@ -282,7 +282,29 @@ class PHPMarkdown {
     }
 
     private function replaceHyperlink($content){
-
+        
+        $contentHyperlinkText = "";
+        $contentHyperlink = "";
+        for ($i = 0; $i < strlen($content); $i++){
+            if($content[$i] == "[" && $content[($i - 1)]){
+                for ($x = ($i + 1); $x < strlen($content); $x++){
+                    if($content[$x] != "]"){
+                        $contentHyperlinkText .= $content[$x];
+                    } elseif($content[$x] == "]" && $content[($x + 1)] == "(") {
+                        for ($y = ($x + 2); $y < strlen($content); $y++){
+                            if($content[$y] != ")"){
+                                
+                                $contentHyperlink .= $content[$y];
+                            } else {
+                                $content = str_replace("[$contentHyperlinkText]($contentHyperlink)", "<a href='$contentHyperlink'>$contentHyperlinkText</a>", $content);
+                            }
+                        }
+                    }
+                }
+            }
+            $contentHyperlink = "";
+            $contentHyperlinkText = "";
+        }
         return $content;
     }
 

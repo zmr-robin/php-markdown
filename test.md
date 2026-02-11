@@ -3,7 +3,7 @@
 **Lorem ipsum** dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorems ipsum dolor sit amet. ==Lorem ipsum dolor sit amet==, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 ---
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod *tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.* Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo _dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet._
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod *tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.* Stet clita kasd gubergren, no sea takimata [sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor](http://example.com/) sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam [erat, sed diam](https://example.com/) voluptua. At vero eos et accusam et justo duo _dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet._
 
 --- 
 
@@ -24,5 +24,5 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
     - Test 8
 
 ## Hello World 2
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
+[Lorem ipsum](https://example.com/)dolor sit amet, consetetur sadipscing elitr, sed diam 
 > Robin Z.
