@@ -57,19 +57,6 @@ HTML Output
 <b>Bold text</b> and <i>italic text</i> <a href='https://www.google.com'>Google</a>
 ```
 
-```php
-else {
-                    // convert to <p>
-                    if (!str_contains($content, "<img src='")){
-                        $content = $this->closeList($content);
-                        return "<p>$content</p>";
-                    } else {
-                        $content = $this->closeList($content);
-                        return $content;
-                    }
-                }
-``
-
 ## Try it for yourself 
 
 Visit the [live demo](https://zmro.dev/md/).
