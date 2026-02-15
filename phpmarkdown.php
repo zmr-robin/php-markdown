@@ -28,13 +28,13 @@ class PHPMarkdown {
 
 
     public function convertLineToHtml($content){
+        $content = $this->replaceHyperlink($content);
         $content = $this->convertLineType($content);
         $content = $this->replaceFontStyleBold($content);
         $content = $this->replaceFontStyleItalic($content);
         $content = $this->replaceFontStyleUnderline($content);
         $content = $this->replaceFontStyleHighlight($content);
         $content = $this->replaceFontStyleStrikethrough($content);
-        $content = $this->replaceHyperlink($content);
         return $content;
     } 
 
@@ -83,7 +83,11 @@ class PHPMarkdown {
                     }
                 } else {
                     // convert to <p>
-                    return $this->closeList() . "<p>$content</p>";
+                    if (!str_contains($content, "<img src='")){
+                        return $this->closeList() . "<p>$content</p>";
+                    } else {
+                        return $this->closeList()  . $content;
+                    }
                 }
         }
     }
@@ -282,25 +286,42 @@ class PHPMarkdown {
         
         $contentHyperlinkText = "";
         $contentHyperlink = "";
+        $contentImageUrl = "";
+        $contentImageAltTag = "";
         for ($i = 0; $i < strlen($content); $i++){
-            if($content[$i] == "[" && $content[($i - 1)]){
+            if($content[$i] == "[" && $content[($i - 1)] != "!"){
                 for ($x = ($i + 1); $x < strlen($content); $x++){
                     if($content[$x] != "]"){
                         $contentHyperlinkText .= $content[$x];
                     } elseif($content[$x] == "]" && $content[($x + 1)] == "(") {
                         for ($y = ($x + 2); $y < strlen($content); $y++){
                             if($content[$y] != ")"){
-                                
                                 $contentHyperlink .= $content[$y];
                             } else {
                                 $content = str_replace("[$contentHyperlinkText]($contentHyperlink)", "<a href='$contentHyperlink'>$contentHyperlinkText</a>", $content);
                             }
                         }
-                    }
+                    } 
+                }
+            } elseif ($content[$i] == "[" && $content[($i - 1)] == "!") {
+                for ($x = ($i + 1); $x < strlen($content); $x++){
+                    if($content[$x] != "]"){
+                        $contentImageAltTag .= $content[$x];
+                    } elseif($content[$x] == "]" && $content[($x + 1)] == "(") {
+                        for ($y = ($x + 2); $y < strlen($content); $y++){
+                            if($content[$y] != ")"){
+                                $contentImageUrl .= $content[$y];
+                            } else {
+                                $content = str_replace("![$contentImageAltTag]($contentImageUrl)", "<img src='$contentImageUrl' alt='$contentImageAltTag'/>", $content);
+                            }
+                        }
+                    } 
                 }
             }
             $contentHyperlink = "";
             $contentHyperlinkText = "";
+            $contentImageAltTag = "";
+            $contentImageUrl = "";
         }
         return $content;
     }
