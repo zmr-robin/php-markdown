@@ -23,7 +23,7 @@ class PHPMarkdown {
                 $content .= "\n";
             }
         }
-        return $content;
+        return $content . $this->closeList();
     }
 
 
@@ -41,9 +41,7 @@ class PHPMarkdown {
     private function convertLineType($content){
         switch($content[0]){
             case "#":   
-                $content = $this->convertToHeader($content);
-                $content = $this->closeList($content);
-                return $content;
+                return $this->closeList() . $this->convertToHeader($content);   
             case "*":
                 if($content[1] != "*"){
                     $content = $this->convertToBulletlist($content, "*");
@@ -57,13 +55,13 @@ class PHPMarkdown {
                     return $content;
                 } elseif (($content[0] . $content[1] . $content[2]) == "---" && strlen(trim($content)) == 3) {
                     $content = "<hr>";
-                    return $this->closeList($content);
+                    return $this->closeList() . $content;
                 } else {
                     return "<p>$content</p>";
                 }
             case ">":
                 $content = $this->convertToQuote($content);
-                $content = $this->closeList($content);
+                $content .= $this->closeList();
                 return $content;
             default:
                 if (preg_match('/^\s*([0-9]+)\.?/', $content, $matches)){
@@ -85,8 +83,7 @@ class PHPMarkdown {
                     }
                 } else {
                     // convert to <p>
-                    $content = $this->closeList($content);
-                    return "<p>$content</p>";
+                    return $this->closeList() . "<p>$content</p>";
                 }
         }
     }
@@ -108,28 +105,28 @@ class PHPMarkdown {
         return str_replace("$headerReplace ", "<h$headerCounter>", $content) . "</h$headerCounter>";
     }
 
-    private function closeList($content){
+    private function closeList(){
 
         if ($this->listIndex != -1 && $this->numListIndex != -1) {
             if ($this->listIndex < $this->numListIndex){
                 $this->numListIndex = -1;
                 $this->listIndex = -1;
-                return "</ol></ul>$content";
+                return "</ol></ul>";
             } elseif ($this->listIndex > $this->numListIndex) {
                 $this->numListIndex = -1;
                 $this->listIndex = -1;
-                return "</ul></ol>$content";
+                return "</ul></ol>";
             }
         } else {
             if ($this->numListIndex != -1 ){
                 $this->numListIndex = -1;
-                return "</ol>$content";             
+                return "</ol>";             
             } elseif ($this->listIndex != -1) {
                 $this->listIndex = -1;
-                return "</ul>$content";
+                return "</ul>";
             }
         }
-        return $content;
+        return "";
 
     }
 
