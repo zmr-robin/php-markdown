@@ -57,6 +57,52 @@ HTML Output
 <b>Bold text</b> and <i>italic text</i> <a href='https://www.google.com'>Google</a>
 ```
 
+```php
+    private function replaceHyperlink($content){
+        
+        $contentHyperlinkText = "";
+        $contentHyperlink = "";
+        $contentImageUrl = "";
+        $contentImageAltTag = "";
+        for ($i = 0; $i < strlen($content); $i++){
+            if($content[$i] == "[" && $content[($i - 1)] != "!"){
+                for ($x = ($i + 1); $x < strlen($content); $x++){
+                    if($content[$x] != "]"){
+                        $contentHyperlinkText .= $content[$x];
+                    } elseif($content[$x] == "]" && $content[($x + 1)] == "(") {
+                        for ($y = ($x + 2); $y < strlen($content); $y++){
+                            if($content[$y] != ")"){
+                                $contentHyperlink .= $content[$y];
+                            } else {
+                                $content = str_replace("[$contentHyperlinkText]($contentHyperlink)", "<a href='$contentHyperlink'>$contentHyperlinkText</a>", $content);
+                            }
+                        }
+                    } 
+                }
+            } elseif ($content[$i] == "[" && $content[($i - 1)] == "!") {
+                for ($x = ($i + 1); $x < strlen($content); $x++){
+                    if($content[$x] != "]"){
+                        $contentImageAltTag .= $content[$x];
+                    } elseif($content[$x] == "]" && $content[($x + 1)] == "(") {
+                        for ($y = ($x + 2); $y < strlen($content); $y++){
+                            if($content[$y] != ")"){
+                                $contentImageUrl .= $content[$y];
+                            } else {
+                                $content = str_replace("![$contentImageAltTag]($contentImageUrl)", "<img src='$contentImageUrl' alt='$contentImageAltTag'/>", $content);
+                            }
+                        }
+                    } 
+                }
+            }
+            $contentHyperlink = "";
+            $contentHyperlinkText = "";
+            $contentImageAltTag = "";
+            $contentImageUrl = "";
+        }
+        return $content;
+    }
+``
+
 ## Try it for yourself 
 
 Visit the [live demo](https://zmro.dev/md/).
