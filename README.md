@@ -10,7 +10,8 @@ PHPMarkdown is a simple yet powerful PHP class that converts Markdown syntax int
 - Supports bold, italic, <u>underline</u>, strikethrough, and ==highlight==
 - Handles unordered and numbered lists
 - Converts blockquotes
-- Converts hyperlinks 
+- Converts hyperlinks
+- Converts images
 - Maintains nested lists and mixed content formatting
 - Easy to extend with additional Markdown syntax
 
