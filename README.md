@@ -22,11 +22,9 @@ PHPMarkdown is a simple yet powerful PHP class that converts Markdown syntax int
 ```bash
 composer require zmr-robin/php-markdown
 ```
-
-
-### 1. Include the class in your project
+### 2. Include the class in your project
 ```php
-require_once 'PHPMarkdown.php';
+require_once 'vendor/autoload.php';
 $parser = new PHPMarkdown();
 ```
 ### 2. Convert a Markdown file to HTML
