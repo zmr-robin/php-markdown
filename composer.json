@@ -14,6 +14,6 @@
             "email": "zimmer@zmro.de"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "require": {}
 }
