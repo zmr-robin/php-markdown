@@ -4,9 +4,7 @@
     "type": "libary",
     "license": "MIT",
     "autoload": {
-        "psr-4": {
-            "PhpMarkdown\\": "src/"
-        }
+        "files": ["src/phpmarkdown.php"]
     },
     "authors": [
         {
