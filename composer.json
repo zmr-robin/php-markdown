@@ -1,0 +1,19 @@
+{
+    "name": "zmr-robin/php-markdown",
+    "description": "PHPMarkdown is a simple PHP class that converts Markdown syntax into HTML.",
+    "type": "libary",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ZmrRobin\\PhpMarkdown\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Robin Zimmer",
+            "email": "zimmer@zmro.de"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {}
+}
