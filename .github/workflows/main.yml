@@ -1,0 +1,19 @@
+name: Update Packagist
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  update-packagist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify Packagist
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"repository":{"url":"https://github.com/zmr-robin/php-markdown"}}' \
+            https://packagist.org/api/update-package?username=zmr-robin&apiToken=${{ secrets.PACKAGIST_API_TOKEN }}
