@@ -1,5 +1,6 @@
 <?php 
 
+namespace PHPMarkdown;
 class PHPMarkdown {
 
     private $bold = false;

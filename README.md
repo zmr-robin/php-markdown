@@ -15,7 +15,14 @@ PHPMarkdown is a simple yet powerful PHP class that converts Markdown syntax int
 - Maintains nested lists and mixed content formatting
 - Easy to extend with additional Markdown syntax
 
-## Installation / Usage
+## Installation
+
+
+### 1. Install package using composer
+```bash
+composer require zmr-robin/php-markdown
+```
+
 
 ### 1. Include the class in your project
 ```php
