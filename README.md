@@ -61,7 +61,3 @@ HTML Output
 <blockquote>Quote example</blockquote>
 <b>Bold text</b> and <i>italic text</i> <a href='https://www.google.com'>Google</a>
 ```
-
-## Try it for yourself 
-
-Visit the [live demo](https://zmro.dev/md/).
